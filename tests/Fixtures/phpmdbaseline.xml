@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<phpmd-baseline>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Metric/Baseline.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Metric/Baseline.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Metric/Baseline2.php"/>
+</phpmd-baseline>

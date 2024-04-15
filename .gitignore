@@ -1,0 +1,7 @@
+/.phpunit.cache/
+/panaly-storage/
+/vendor/
+.phpcs-cache
+.project-analyzer-cache
+composer.lock
+metric_storage.json
