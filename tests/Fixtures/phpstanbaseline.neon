@@ -8,7 +8,7 @@ parameters:
 		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 3
-			path: src/Foo/Bar.php
+			path: src/Foo/Baz.php
 
 		-
 			message: "#^Cannot call method bar\\(\\) on Foo\\\\Bar\\\\Baz|null\\.$#"

@@ -35,6 +35,25 @@ class PHPStanBaselineCountTest extends TestCase
         self::assertSame(5, $result->compute());
     }
 
+    #[DataProvider('providePathPatterns')]
+    public function testCalculationWithExistingBaselineWithGivenPaths(array $paths, int $expectedResult): void
+    {
+        $result = (new PHPStanBaselineCount())->calculate([
+            'baseline' => __DIR__ . '/../Fixtures/phpstanbaseline.neon',
+            'paths' => $paths,
+        ]);
+
+        self::assertSame($expectedResult, $result->compute());
+    }
+
+    public static function providePathPatterns(): Generator
+    {
+        yield 'simple file' => [['src/Foo/Bar.php'], 2];
+        yield 'star pattern' => [['src/Foo/*'], 5];
+        yield 'recursive pattern' => [['src/**/*'], 5];
+        yield 'all files named' => [['src/Foo/Bar.php', 'src/Foo/Baz.php'], 5];
+    }
+
     #[DataProvider('provideInvalidBaselineOptions')]
     public function testCalculationWithInvalidBaselineOption(array $options): void
     {
