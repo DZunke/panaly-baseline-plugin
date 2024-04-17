@@ -8,6 +8,7 @@ use DZunke\PanalyBaseline\Metric\Exception\BaselineNotReadable;
 use DZunke\PanalyBaseline\Metric\Exception\InvalidOption;
 use DZunke\PanalyBaseline\Psalm\BaselineReader;
 use Panaly\Plugin\Plugin\Metric;
+use Panaly\Provider\FileProvider;
 use Panaly\Result\Metric\Integer;
 use Panaly\Result\Metric\Value;
 
@@ -15,10 +16,7 @@ use function array_key_exists;
 use function array_map;
 use function array_sum;
 use function count;
-use function file_get_contents;
 use function is_array;
-use function is_file;
-use function is_readable;
 use function is_string;
 
 final class PsalmBaselineCount implements Metric
@@ -41,16 +39,13 @@ final class PsalmBaselineCount implements Metric
             throw InvalidOption::baselineOptionMustBeGiven((string) $baseline);
         }
 
-        if (! is_file($options['baseline']) || ! is_readable($options['baseline'])) {
-            throw InvalidOption::baselineOptionMustBeAnExistingAndReadableFile($options['baseline']);
+        try {
+            $baselineContent = (new FileProvider())->read($options['baseline']);
+        } catch (FileProvider\InvalidFileAccess $previous) {
+            throw BaselineNotReadable::baselineLoadingFailed($options['baseline'], $previous);
         }
 
-        $baselineContent = file_get_contents($options['baseline']);
-        if ($baselineContent === false) {
-            throw BaselineNotReadable::baselineLoadingFailed($options['baseline']);
-        }
-
-        $baseline = BaselineReader::read($options['baseline']);
+        $baseline = BaselineReader::read($baselineContent);
 
         if (array_key_exists('paths', $options) && is_array($options['paths']) && count($options['paths']) > 0) {
             $baseline = BaselineArrayFilter::filterFileIndexedArray($baseline, $options['paths']);

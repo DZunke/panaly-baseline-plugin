@@ -6,11 +6,9 @@ namespace DZunke\PanalyBaseline\Psalm;
 
 use DOMDocument;
 use DOMElement;
-use DZunke\PanalyBaseline\Metric\Exception\BaselineNotReadable;
 use RuntimeException;
 
 use function assert;
-use function file_get_contents;
 use function str_replace;
 
 use const LIBXML_NOBLANKS;
@@ -25,21 +23,11 @@ class BaselineReader
     {
     }
 
-    /**
-     * @param non-empty-string $baselineFile
-     *
-     * @return array<string, array<string, int>>
-     */
-    public static function read(string $baselineFile): array
+    /** @return array<string, array<string, int>> */
+    public static function read(string $baselineContent): array
     {
-        $xmlSource = (string) file_get_contents($baselineFile);
-
-        if ($xmlSource === '') {
-            throw BaselineNotReadable::baselineLoadingFailed($xmlSource);
-        }
-
         $baselineDoc = new DOMDocument();
-        $baselineDoc->loadXML($xmlSource, LIBXML_NOBLANKS);
+        $baselineDoc->loadXML($baselineContent, LIBXML_NOBLANKS);
 
         $filesElement = $baselineDoc->getElementsByTagName('files');
 

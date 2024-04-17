@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DZunke\PanalyBaseline\Test\Metric;
 
+use DZunke\PanalyBaseline\Metric\Exception\BaselineNotReadable;
 use DZunke\PanalyBaseline\Metric\Exception\InvalidOption;
 use DZunke\PanalyBaseline\Metric\PsalmBaselineCount;
 use Generator;
@@ -74,8 +75,7 @@ class PsalmBaselineCountTest extends TestCase
 
     public function testUnreadableBaselineThroesException(): void
     {
-        $this->expectException(InvalidOption::class);
-        $this->expectExceptionMessage('The given baseline "foo" is not an existing file or not readable.');
+        $this->expectException(BaselineNotReadable::class);
 
         (new PsalmBaselineCount())->calculate(['baseline' => 'foo']);
     }

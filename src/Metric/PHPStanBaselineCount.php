@@ -7,6 +7,7 @@ namespace DZunke\PanalyBaseline\Metric;
 use DZunke\PanalyBaseline\Metric\Exception\BaselineNotReadable;
 use DZunke\PanalyBaseline\Metric\Exception\InvalidOption;
 use Panaly\Plugin\Plugin\Metric;
+use Panaly\Provider\FileProvider;
 use Panaly\Result\Metric\Integer;
 use Panaly\Result\Metric\Value;
 
@@ -14,10 +15,7 @@ use function array_key_exists;
 use function array_sum;
 use function assert;
 use function count;
-use function file_get_contents;
 use function is_array;
-use function is_file;
-use function is_readable;
 use function is_string;
 use function preg_match_all;
 
@@ -41,33 +39,21 @@ final class PHPStanBaselineCount implements Metric
             throw InvalidOption::baselineOptionMustBeGiven((string) $baseline);
         }
 
-        if (! is_file($options['baseline']) || ! is_readable($options['baseline'])) {
-            throw InvalidOption::baselineOptionMustBeAnExistingAndReadableFile($options['baseline']);
-        }
-
-        $baselineContent = file_get_contents($options['baseline']);
-        if ($baselineContent === false) {
-            throw BaselineNotReadable::baselineLoadingFailed($options['baseline']);
+        try {
+            $baselineContent = (new FileProvider())->read($options['baseline']);
+        } catch (FileProvider\InvalidFileAccess $previous) {
+            throw BaselineNotReadable::baselineLoadingFailed($options['baseline'], $previous);
         }
 
         if (array_key_exists('paths', $options) && is_array($options['paths']) && count($options['paths']) > 0) {
-            return $this->pathFilteredSummary($options['baseline'], $options['paths']);
+            return $this->pathFilteredSummary($baselineContent, $options['paths']);
         }
 
-        return $this->simplePregMatchSummary($options['baseline']);
+        return $this->simplePregMatchSummary($baselineContent);
     }
 
-    /**
-     * @param non-empty-string $baseline
-     * @param string[]         $paths
-     */
-    private function pathFilteredSummary(string $baseline, array $paths): Value
+    private function pathFilteredSummary(string $baselineContent, array $paths): Value
     {
-        $baselineContent = file_get_contents($baseline);
-        if ($baselineContent === false) {
-            throw BaselineNotReadable::baselineLoadingFailed($baseline);
-        }
-
         $foundViolations = [];
         preg_match_all('/count: (\d).*\spath: (.+)$/msU', $baselineContent, $foundViolations);
 
@@ -87,13 +73,8 @@ final class PHPStanBaselineCount implements Metric
         return new Integer(array_sum(BaselineArrayFilter::filterFileIndexedArray($result, $paths)));
     }
 
-    private function simplePregMatchSummary(string $baselineFile): Value
+    private function simplePregMatchSummary(string $baselineContent): Value
     {
-        $baselineContent = file_get_contents($baselineFile);
-        if ($baselineContent === false) {
-            throw BaselineNotReadable::baselineLoadingFailed($baselineFile);
-        }
-
         $foundCounts = [];
         preg_match_all('/count: (\d)/m', $baselineContent, $foundCounts);
 

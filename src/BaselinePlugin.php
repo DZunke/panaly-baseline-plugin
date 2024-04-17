@@ -14,6 +14,10 @@ final class BaselinePlugin extends BasePlugin
     /** @inheritDoc */
     public function getAvailableMetrics(array $options): array
     {
-        return [new PHPMDBaselineCount(), new PsalmBaselineCount(), new PHPStanBaselineCount()];
+        return [
+            new PHPMDBaselineCount(),
+            new PsalmBaselineCount(),
+            new PHPStanBaselineCount(),
+        ];
     }
 }
