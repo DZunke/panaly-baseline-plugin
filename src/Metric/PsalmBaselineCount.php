@@ -6,17 +6,20 @@ namespace DZunke\PanalyBaseline\Metric;
 
 use DZunke\PanalyBaseline\Metric\Exception\BaselineNotReadable;
 use DZunke\PanalyBaseline\Metric\Exception\InvalidOption;
+use DZunke\PanalyBaseline\Psalm\BaselineReader;
 use Panaly\Plugin\Plugin\Metric;
 use Panaly\Result\Metric\Integer;
 use Panaly\Result\Metric\Value;
 
 use function array_key_exists;
+use function array_map;
+use function array_sum;
 use function count;
 use function file_get_contents;
+use function is_array;
 use function is_file;
 use function is_readable;
 use function is_string;
-use function preg_match_all;
 
 final class PsalmBaselineCount implements Metric
 {
@@ -47,23 +50,20 @@ final class PsalmBaselineCount implements Metric
             throw BaselineNotReadable::baselineLoadingFailed($options['baseline']);
         }
 
-        return $this->simplePregMatchSummary($options['baseline']);
+        $baseline = BaselineReader::read($options['baseline']);
+
+        if (array_key_exists('paths', $options) && is_array($options['paths']) && count($options['paths']) > 0) {
+            $baseline = BaselineArrayFilter::filterFileIndexedArray($baseline, $options['paths']);
+        }
+
+        return $this->summarize($baseline);
     }
 
-    private function simplePregMatchSummary(string $baselineFile): Value
+    private function summarize(array $baseline): Value
     {
-        $baselineContent = file_get_contents($baselineFile);
-        if ($baselineContent === false) {
-            throw BaselineNotReadable::baselineLoadingFailed($baselineFile);
-        }
-
-        $foundCounts = [];
-        preg_match_all('/<code>/m', $baselineContent, $foundCounts);
-
-        if (count($foundCounts) === 0) {
-            return new Integer(0);
-        }
-
-        return new Integer(count($foundCounts[0]));
+        return new Integer(array_sum(array_map(
+            static fn (array $byErrorTypes) => array_sum($byErrorTypes),
+            $baseline,
+        )));
     }
 }

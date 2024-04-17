@@ -32,16 +32,17 @@ as identical messages from a single file are put together with a count within th
 | Option   | Description                                                                                                                   |
 |----------|-------------------------------------------------------------------------------------------------------------------------------|
 | baseline | **(Required)** The baseline file of phpstan, it must be readable and containing the known phpstan neon format.                | 
-| paths    | **(Optional)** Only count files for specific paths from the baseline file. A path could be anything valid in Codeowners file. | 
+| paths    | **(Optional)** Only count files for specific paths from the baseline file. A path could be anything valid in CODEOWNERS file. |
 
 **Psalm Baseline Count**
 
 The metric with the identifier `psalm_baseline_count` gives an `Integer` result which contains the sum of all `code`
 entries which represent a single error within a class.
 
-| Option   | Description                                                                                               |
-|----------|-----------------------------------------------------------------------------------------------------------|
-| baseline | **(Required)** The baseline file of psalm, it must be readable and containing the known psalm xml format. | 
+| Option   | Description                                                                                                                   |
+|----------|-------------------------------------------------------------------------------------------------------------------------------|
+| baseline | **(Required)** The baseline file of psalm, it must be readable and containing the known psalm xml format.                     |
+| paths    | **(Optional)** Only count files for specific paths from the baseline file. A path could be anything valid in CODEOWNERS file. |
 
 ## Example Configuration
 

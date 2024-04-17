@@ -52,6 +52,7 @@ class PHPStanBaselineCountTest extends TestCase
         yield 'star pattern' => [['src/Foo/*'], 5];
         yield 'recursive pattern' => [['src/**/*'], 5];
         yield 'all files named' => [['src/Foo/Bar.php', 'src/Foo/Baz.php'], 5];
+        yield 'empty result after filtering' => [['src/Foo/Bar.js'], 0];
     }
 
     #[DataProvider('provideInvalidBaselineOptions')]

@@ -9,10 +9,8 @@ use DZunke\PanalyBaseline\Metric\Exception\InvalidOption;
 use Panaly\Plugin\Plugin\Metric;
 use Panaly\Result\Metric\Integer;
 use Panaly\Result\Metric\Value;
-use Symfony\Component\Finder\Glob;
 
 use function array_key_exists;
-use function array_map;
 use function array_sum;
 use function assert;
 use function count;
@@ -21,7 +19,6 @@ use function is_array;
 use function is_file;
 use function is_readable;
 use function is_string;
-use function preg_match;
 use function preg_match_all;
 
 final class PHPStanBaselineCount implements Metric
@@ -87,21 +84,7 @@ final class PHPStanBaselineCount implements Metric
             $result[$file] += $foundViolations[1][$index];
         }
 
-        // Filter the result for only files that should be summed up
-        $filteredResult = [];
-
-        $paths = array_map(static fn (string $path) => Glob::toRegex($path), $paths);
-        foreach ($paths as $pathToMatch) {
-            foreach ($result as $file => $count) {
-                if (preg_match($pathToMatch, $file) === 0) {
-                    continue;
-                }
-
-                $filteredResult[$file] = $count;
-            }
-        }
-
-        return new Integer(array_sum($filteredResult));
+        return new Integer(array_sum(BaselineArrayFilter::filterFileIndexedArray($result, $paths)));
     }
 
     private function simplePregMatchSummary(string $baselineFile): Value
