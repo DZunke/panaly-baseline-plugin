@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DZunke\PanalyPHPMD\Metric;
+namespace DZunke\PanalyBaseline\Metric;
 
-use DZunke\PanalyPHPMD\Metric\Exception\BaselineNotReadable;
-use DZunke\PanalyPHPMD\Metric\Exception\InvalidOption;
+use DZunke\PanalyBaseline\Metric\Exception\BaselineNotReadable;
+use DZunke\PanalyBaseline\Metric\Exception\InvalidOption;
 use Panaly\Plugin\Plugin\Metric;
 use Panaly\Result\Metric\Integer;
 use Panaly\Result\Metric\Value;
@@ -25,7 +25,7 @@ use function in_array;
 use function is_array;
 use function is_string;
 
-final class Baseline implements Metric
+final class PHPMDBaselineCount implements Metric
 {
     public function getIdentifier(): string
     {
@@ -34,7 +34,7 @@ final class Baseline implements Metric
 
     public function getDefaultTitle(): string
     {
-        return 'PHPMD Baseline Entry Count';
+        return 'PHPMD Baseline Count';
     }
 
     public function calculate(array $options): Value

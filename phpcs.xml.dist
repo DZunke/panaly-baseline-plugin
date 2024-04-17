@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Panaly Project Analyzer - PHPMD Plugin">
+<ruleset name="Panaly Project Analyzer - Baseline Plugin">
     <arg value="p"/>
     <arg value="s"/>
     <arg name="colors"/>

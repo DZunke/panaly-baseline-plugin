@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DZunke\PanalyPHPMD\Metric\Exception;
+namespace DZunke\PanalyBaseline\Metric\Exception;
 
 use RuntimeException;
 use Throwable;

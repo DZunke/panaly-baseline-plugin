@@ -2,43 +2,43 @@
 
 declare(strict_types=1);
 
-namespace DZunke\PanalyPHPMD\Test\Metric;
+namespace DZunke\PanalyBaseline\Test\Metric;
 
-use DZunke\PanalyPHPMD\Metric\Baseline;
-use DZunke\PanalyPHPMD\Metric\Exception\BaselineNotReadable;
-use DZunke\PanalyPHPMD\Metric\Exception\InvalidOption;
+use DZunke\PanalyBaseline\Metric\Exception\BaselineNotReadable;
+use DZunke\PanalyBaseline\Metric\Exception\InvalidOption;
+use DZunke\PanalyBaseline\Metric\PHPMDBaselineCount;
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class BaselineTest extends TestCase
+class PHPMDBaselineCountTest extends TestCase
 {
     public function testThatTheIdentifierIsCorrect(): void
     {
         self::assertSame(
             'phpmd_baseline_count',
-            (new Baseline())->getIdentifier(),
+            (new PHPMDBaselineCount())->getIdentifier(),
         );
     }
 
     public function testThatTheDefaultTitleIsCorrect(): void
     {
         self::assertSame(
-            'PHPMD Baseline Entry Count',
-            (new Baseline())->getDefaultTitle(),
+            'PHPMD Baseline Count',
+            (new PHPMDBaselineCount())->getDefaultTitle(),
         );
     }
 
     public function testCalculationWithExistingBaseline(): void
     {
-        $result = (new Baseline())->calculate(['baseline' => __DIR__ . '/../Fixtures/phpmdbaseline.xml']);
+        $result = (new PHPMDBaselineCount())->calculate(['baseline' => __DIR__ . '/../Fixtures/phpmdbaseline.xml']);
 
         self::assertSame(3, $result->compute());
     }
 
     public function testCalculationWithExistingBaselineFilteredByRule(): void
     {
-        $result = (new Baseline())->calculate(
+        $result = (new PHPMDBaselineCount())->calculate(
             [
                 'baseline' => __DIR__ . '/../Fixtures/phpmdbaseline.xml',
                 'filter' => ['StaticAccess'],
@@ -54,7 +54,7 @@ class BaselineTest extends TestCase
         $this->expectException(InvalidOption::class);
         $this->expectExceptionMessage('The baseline option must be a valid non-empty string.');
 
-        (new Baseline())->calculate($options);
+        (new PHPMDBaselineCount())->calculate($options);
     }
 
     public static function provideInvalidBaselineOptions(): Generator
@@ -68,6 +68,6 @@ class BaselineTest extends TestCase
     {
         $this->expectException(BaselineNotReadable::class);
 
-        (new Baseline())->calculate(['baseline' => 'foo']);
+        (new PHPMDBaselineCount())->calculate(['baseline' => 'foo']);
     }
 }

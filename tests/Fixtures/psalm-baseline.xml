@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="5.23.1@8471a896ccea3526b26d082f4461eeea467f10a4">
+    <file src="src/Foo/Bar.php">
+        <PossiblyNullReference>
+            <code><![CDATA[getFoo]]></code>
+        </PossiblyNullReference>
+        <PropertyTypeCoercion>
+            <code><![CDATA[$repository->findOneBy(['foo' => 'bar'])]]></code>
+        </PropertyTypeCoercion>
+    </file>
+    <file src="src/Foo/Bar/Baz.php">
+        <PossiblyNullArgument>
+            <code><![CDATA[$foo]]></code>
+            <code><![CDATA[$bar]]></code>
+        </PossiblyNullArgument>
+        <PossiblyNullReference>
+            <code><![CDATA[getFoo]]></code>
+            <code><![CDATA[getFoo]]></code>
+            <code><![CDATA[getFoo]]></code>
+        </PossiblyNullReference>
+        <RiskyTruthyFalsyComparison>
+            <code><![CDATA[$baz]]></code>
+        </RiskyTruthyFalsyComparison>
+    </file>
+</files>

@@ -1,18 +1,18 @@
 {
-    "name": "dzunke/panaly-phpmd-plugin",
-    "description": "A Panaly plugin that enables metrics from phpmd tooling and the baseline of it.",
+    "name": "dzunke/panaly-baseline-plugin",
+    "description": "A Panaly plugin that deliver metrics from various quality tool baselines",
     "type": "library",
     "license": "MIT",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "DZunke\\PanalyPHPMD\\": "src/"
+            "DZunke\\PanalyBaseline\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "DZunke\\PanalyPHPMD\\Test\\": "tests/"
+            "DZunke\\PanalyBaseline\\Test\\": "tests/"
         }
     },
     "authors": [
