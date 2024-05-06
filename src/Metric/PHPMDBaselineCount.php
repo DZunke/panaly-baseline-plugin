@@ -7,7 +7,7 @@ namespace DZunke\PanalyBaseline\Metric;
 use DZunke\PanalyBaseline\Metric\Exception\BaselineNotReadable;
 use DZunke\PanalyBaseline\Metric\Exception\InvalidOption;
 use Panaly\Plugin\Plugin\Metric;
-use Panaly\Result\Metric\Integer;
+use Panaly\Result\Metric\IntegerValue;
 use Panaly\Result\Metric\Value;
 use PHPMD\Baseline\BaselineSetFactory;
 use PHPMD\Baseline\ViolationBaseline;
@@ -55,7 +55,7 @@ final class PHPMDBaselineCount implements Metric
         }
 
         if (! array_key_exists('filter', $options) || ! is_array($options['filter'])) {
-            return new Integer(array_sum(array_map('count', $violations)));
+            return new IntegerValue(array_sum(array_map('count', $violations)));
         }
 
         $filteredViolationsCount = 0;
@@ -70,6 +70,6 @@ final class PHPMDBaselineCount implements Metric
             $filteredViolationsCount += count($violationSet);
         }
 
-        return new Integer($filteredViolationsCount);
+        return new IntegerValue($filteredViolationsCount);
     }
 }

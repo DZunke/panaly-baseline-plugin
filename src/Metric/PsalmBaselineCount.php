@@ -9,7 +9,7 @@ use DZunke\PanalyBaseline\Metric\Exception\InvalidOption;
 use DZunke\PanalyBaseline\Psalm\BaselineReader;
 use Panaly\Plugin\Plugin\Metric;
 use Panaly\Provider\FileProvider;
-use Panaly\Result\Metric\Integer;
+use Panaly\Result\Metric\IntegerValue;
 use Panaly\Result\Metric\Value;
 
 use function array_key_exists;
@@ -56,7 +56,7 @@ final class PsalmBaselineCount implements Metric
 
     private function summarize(array $baseline): Value
     {
-        return new Integer(array_sum(array_map(
+        return new IntegerValue(array_sum(array_map(
             static fn (array $byErrorTypes) => array_sum($byErrorTypes),
             $baseline,
         )));

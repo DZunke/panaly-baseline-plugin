@@ -8,7 +8,7 @@ use DZunke\PanalyBaseline\Metric\Exception\BaselineNotReadable;
 use DZunke\PanalyBaseline\Metric\Exception\InvalidOption;
 use Panaly\Plugin\Plugin\Metric;
 use Panaly\Provider\FileProvider;
-use Panaly\Result\Metric\Integer;
+use Panaly\Result\Metric\IntegerValue;
 use Panaly\Result\Metric\Value;
 
 use function array_key_exists;
@@ -70,7 +70,7 @@ final class PHPStanBaselineCount implements Metric
             $result[$file] += $foundViolations[1][$index];
         }
 
-        return new Integer(array_sum(BaselineArrayFilter::filterFileIndexedArray($result, $paths)));
+        return new IntegerValue(array_sum(BaselineArrayFilter::filterFileIndexedArray($result, $paths)));
     }
 
     private function simplePregMatchSummary(string $baselineContent): Value
@@ -79,9 +79,9 @@ final class PHPStanBaselineCount implements Metric
         preg_match_all('/count: (\d)/m', $baselineContent, $foundCounts);
 
         if (count($foundCounts) === 0) {
-            return new Integer(0);
+            return new IntegerValue(0);
         }
 
-        return new Integer(array_sum($foundCounts[1]));
+        return new IntegerValue(array_sum($foundCounts[1]));
     }
 }
