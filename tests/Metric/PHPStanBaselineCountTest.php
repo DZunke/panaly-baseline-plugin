@@ -33,9 +33,10 @@ class PHPStanBaselineCountTest extends TestCase
     {
         $result = (new PHPStanBaselineCount())->calculate(['baseline' => __DIR__ . '/../Fixtures/phpstanbaseline.neon']);
 
-        self::assertSame(5, $result->compute());
+        self::assertSame(5, $result->getRaw());
     }
 
+    /** @param list<string> $paths */
     #[DataProvider('providePathPatterns')]
     public function testCalculationWithExistingBaselineWithGivenPaths(array $paths, int $expectedResult): void
     {
@@ -44,7 +45,7 @@ class PHPStanBaselineCountTest extends TestCase
             'paths' => $paths,
         ]);
 
-        self::assertSame($expectedResult, $result->compute());
+        self::assertSame($expectedResult, $result->getRaw());
     }
 
     public static function providePathPatterns(): Generator
@@ -56,6 +57,7 @@ class PHPStanBaselineCountTest extends TestCase
         yield 'empty result after filtering' => [['src/Foo/Bar.js'], 0];
     }
 
+    /** @param array<string, mixed> $options */
     #[DataProvider('provideInvalidBaselineOptions')]
     public function testCalculationWithInvalidBaselineOption(array $options): void
     {

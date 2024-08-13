@@ -16,6 +16,12 @@ final class BaselineArrayFilter
     {
     }
 
+    /**
+     * @param array<string, array<string, int>> $baselineArray
+     * @param list<string>                      $paths
+     *
+     * @return array<string, mixed[]>
+     */
     public static function filterFileIndexedArray(array $baselineArray, array $paths): array
     {
         if (count($baselineArray) === 0) {

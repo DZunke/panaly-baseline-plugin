@@ -13,7 +13,6 @@ use Panaly\Result\Metric\Value;
 
 use function array_key_exists;
 use function array_sum;
-use function assert;
 use function count;
 use function is_array;
 use function is_string;
@@ -52,6 +51,7 @@ final class PHPStanBaselineCount implements Metric
         return $this->simplePregMatchSummary($baselineContent);
     }
 
+    /** @param list<string> $paths */
     private function pathFilteredSummary(string $baselineContent, array $paths): Value
     {
         $foundViolations = [];
@@ -60,8 +60,6 @@ final class PHPStanBaselineCount implements Metric
         /** @var array<string, int> $result */
         $result = [];
         foreach ($foundViolations[2] as $index => $file) {
-            assert(is_string($file));
-
             if (! array_key_exists($file, $result)) {
                 $result[$file] = (int) $foundViolations[1][$index];
                 continue;
@@ -82,6 +80,6 @@ final class PHPStanBaselineCount implements Metric
             return new IntegerValue(0);
         }
 
-        return new IntegerValue(array_sum($foundCounts[1]));
+        return new IntegerValue((int) array_sum($foundCounts[1]));
     }
 }

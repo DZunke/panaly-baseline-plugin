@@ -31,6 +31,7 @@ final class PsalmBaselineCount implements Metric
         return 'Psalm Baseline Count';
     }
 
+    /** @param array<string, mixed> $options */
     public function calculate(array $options): Value
     {
         if (! array_key_exists('baseline', $options) || ! is_string($options['baseline']) || $options['baseline'] === '') {
@@ -54,6 +55,7 @@ final class PsalmBaselineCount implements Metric
         return $this->summarize($baseline);
     }
 
+    /** @param array<string, array<string, int>> $baseline */
     private function summarize(array $baseline): Value
     {
         return new IntegerValue(array_sum(array_map(

@@ -33,9 +33,10 @@ class PsalmBaselineCountTest extends TestCase
     {
         $result = (new PsalmBaselineCount())->calculate(['baseline' => __DIR__ . '/../Fixtures/psalm-baseline.xml']);
 
-        self::assertSame(8, $result->compute());
+        self::assertSame(8, $result->getRaw());
     }
 
+    /** @param list<string> $paths */
     #[DataProvider('providePathPatterns')]
     public function testCalculationWithExistingBaselineWithGivenPaths(array $paths, int $expectedResult): void
     {
@@ -44,7 +45,7 @@ class PsalmBaselineCountTest extends TestCase
             'paths' => $paths,
         ]);
 
-        self::assertSame($expectedResult, $result->compute());
+        self::assertSame($expectedResult, $result->getRaw());
     }
 
     public static function providePathPatterns(): Generator
@@ -57,6 +58,7 @@ class PsalmBaselineCountTest extends TestCase
         yield 'empty result after filtering' => [['src/Foo/Bar.js'], 0];
     }
 
+    /** @param array<string, mixed> $options */
     #[DataProvider('provideInvalidBaselineOptions')]
     public function testCalculationWithInvalidBaselineOption(array $options): void
     {

@@ -7,17 +7,19 @@ namespace DZunke\PanalyBaseline;
 use DZunke\PanalyBaseline\Metric\PHPMDBaselineCount;
 use DZunke\PanalyBaseline\Metric\PHPStanBaselineCount;
 use DZunke\PanalyBaseline\Metric\PsalmBaselineCount;
-use Panaly\Plugin\BasePlugin;
+use Panaly\Configuration\ConfigurationFile;
+use Panaly\Configuration\RuntimeConfiguration;
+use Panaly\Plugin\Plugin;
 
-final class BaselinePlugin extends BasePlugin
+final class BaselinePlugin implements Plugin
 {
-    /** @inheritDoc */
-    public function getAvailableMetrics(array $options): array
-    {
-        return [
-            new PHPMDBaselineCount(),
-            new PsalmBaselineCount(),
-            new PHPStanBaselineCount(),
-        ];
+    public function initialize(
+        ConfigurationFile $configurationFile,
+        RuntimeConfiguration $runtimeConfiguration,
+        array $options,
+    ): void {
+        $runtimeConfiguration->addMetric(new PHPMDBaselineCount());
+        $runtimeConfiguration->addMetric(new PsalmBaselineCount());
+        $runtimeConfiguration->addMetric(new PHPStanBaselineCount());
     }
 }

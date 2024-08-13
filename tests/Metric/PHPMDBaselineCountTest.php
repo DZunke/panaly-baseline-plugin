@@ -33,7 +33,7 @@ class PHPMDBaselineCountTest extends TestCase
     {
         $result = (new PHPMDBaselineCount())->calculate(['baseline' => __DIR__ . '/../Fixtures/phpmdbaseline.xml']);
 
-        self::assertSame(3, $result->compute());
+        self::assertSame(3, $result->getRaw());
     }
 
     public function testCalculationWithExistingBaselineFilteredByRule(): void
@@ -45,9 +45,10 @@ class PHPMDBaselineCountTest extends TestCase
             ],
         );
 
-        self::assertSame(2, $result->compute());
+        self::assertSame(2, $result->getRaw());
     }
 
+    /** @param array<string, mixed> $options */
     #[DataProvider('provideInvalidBaselineOptions')]
     public function testCalculationWithInvalidBaselineOption(array $options): void
     {
